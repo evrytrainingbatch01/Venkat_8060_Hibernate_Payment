@@ -1,6 +1,13 @@
 package com.evry.payment.wallet.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "transaction")
 public class TransactionDetails {
+	@Id
 	private int id;
 	private int process_amount;
 	private int transferto;

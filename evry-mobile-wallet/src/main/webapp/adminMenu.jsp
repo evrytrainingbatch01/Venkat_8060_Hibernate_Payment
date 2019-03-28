@@ -8,14 +8,11 @@
 <title>Evry Payment Wallet</title>
 </head>
 <body style="background-color:powderblue;">
-		<form action="./PaymentController?type=adminlogin" method="post">
-		<table align="center">
-			<tr><th>Add Money: </th><td><input type="text" name="money" /></td></tr>
-			<tr><th>Transfer Money: </th><td><input type="text" name="tran"/></td></tr>
-			<tr><th>Check Balance: </th><td><input type="text" name="bal"/></td></tr>
-			<tr><td><input type="submit" value="Submit"/></td>
-			<td><input type="reset" value="Reset"/></td></tr>
-		</table>
-	</form>
+		<div align="center">
+		<h1 align="center">Evry Payment Wallet</h1>
+		<a href="approveMoney.jsp">Add Money</a>&nbsp;
+		<a href="sendMoney.jsp">Send Money</a>&nbsp;
+		<a href="showUsers.jsp">Show Users</a>&nbsp;
+	</div>
 </body>
 </html>

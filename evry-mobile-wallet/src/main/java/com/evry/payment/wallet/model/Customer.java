@@ -22,7 +22,7 @@ public class Customer {
 	private String email;
 	private int balance = 100;
 	private int access = 0;
-	private int loan_amount = 0;
+	private Integer loan_amount = 0;
 
 	public int getBalance() {
 		return balance;
@@ -40,11 +40,11 @@ public class Customer {
 		this.access = access;
 	}
 
-	public int getLoan_amount() {
+	public Integer getLoan_amount() {
 		return loan_amount;
 	}
 
-	public void setLoan_amount(int loan_amount) {
+	public void setLoan_amount(Integer loan_amount) {
 		this.loan_amount = loan_amount;
 	}
 

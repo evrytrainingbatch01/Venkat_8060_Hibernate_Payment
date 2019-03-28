@@ -16,7 +16,8 @@
 	</div>
 	<form action="./PaymentController?type=transfer" method="post">
 		<table align="center">
-			<tr><th>Transfer Money: </th><td><input type="text" name="money" /></td></tr>
+			<tr><th>Transfer Money to: </th><td><input type="text" name="money" /></td></tr>
+			<tr><th>id: </th><td><input type="text" name="id" /></td></tr>
 			<tr><td><input type="submit" value="Submit"/></td>
 			<td><input type="reset" value="Reset"/></td></tr>
 		</table>

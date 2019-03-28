@@ -33,21 +33,82 @@ public class PaymentController extends HttpServlet {
 		if ("addMoney".equals(request.getParameter("type"))) {
 			addMoney(request, response);
 		}
+		if ("transfer".equals(request.getParameter("type"))) {
+			transferMoney(request, response);
+		}
+		if ("checkBal".equals(request.getParameter("type"))) {
+			checkBalance(request, response);
+		}
+		if ("approve".equals(request.getParameter("type"))) {
+			approveMoney(request, response);
+		}
+		if ("send".equals(request.getParameter("type"))) {
+			sendMoney(request, response);
+		}
 	}
 
-	private void addMoney(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	private void sendMoney(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		PrintWriter out = response.getWriter();
+		int id = Integer.parseInt(request.getParameter("id"));
+		if (paymentDao.sendMoney(id)) {
+			out.print("Money is Treansfered.");
+			request.getRequestDispatcher("/sendMoney.jsp").include(request, response);
+		}
+	}
+
+	private void approveMoney(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		PrintWriter out = response.getWriter();
-		CustomerRegistration payment = new CustomerRegistration();
+		int id = Integer.parseInt(request.getParameter("id"));
+		if (paymentDao.approveMoney(id)) {
+			out.print("Money is aproved.");
+			request.getRequestDispatcher("/approveMoney.jsp").include(request, response);
+		}
+
+	}
+
+	private void checkBalance(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+		PrintWriter out = response.getWriter();
+		HttpSession session = request.getSession();
+		int sid = (Integer) session.getAttribute("userId");
+		out.print("Account Balance is:" + paymentDao.getBalance(sid));
+		request.getRequestDispatcher("/checkBal.jsp").include(request, response);
+	}
+
+	private void transferMoney(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+		PrintWriter out = response.getWriter();
+		int did = Integer.parseInt(request.getParameter("id"));
+		int money = Integer.parseInt(request.getParameter("money"));
+		HttpSession session = request.getSession();
+		int sid = (Integer) session.getAttribute("userId");
+		if (paymentDao.sendMoney(sid, did, money)) {
+			out.print("It is in process.");
+			request.getRequestDispatcher("/transfer.jsp").include(request, response);
+		} else {
+			out.print("Money is not added in your account.");
+			request.getRequestDispatcher("/transfer.jsp").forward(request, response);
+		}
+
+	}
+
+	private void addMoney(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+
+		PrintWriter out = response.getWriter();
 		int money = Integer.parseInt(request.getParameter("money"));
 		HttpSession session = request.getSession();
 		int id = (Integer) session.getAttribute("userId");
-		if ( money > 0) {
-			if(paymentDao.setBalance(id, money)) {
+		if (money > 0) {
+			if (paymentDao.setBalance(id, money)) {
 				out.print("It is in process.");
-			request.getRequestDispatcher("/addMoney.jsp").include(request, response);
-			}
-			else {
+				request.getRequestDispatcher("/addMoney.jsp").include(request, response);
+			} else {
 				out.print("Money is not added in your account.");
 				request.getRequestDispatcher("/addMoney.jsp").forward(request, response);
 			}
@@ -56,13 +117,12 @@ public class PaymentController extends HttpServlet {
 			out.print("Please enter the amount more than zero.");
 			request.getRequestDispatcher("/addMoney.jsp").forward(request, response);
 		}
-	
+
 	}
 
 	private void getAdminMenu(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		PrintWriter out = response.getWriter();
-		CustomerRegistration payment = new CustomerRegistration();
 		String name = request.getParameter("fname");
 		String pwd = request.getParameter("pwd");
 		int id = paymentDao.getMenu(name, pwd);
@@ -74,18 +134,17 @@ public class PaymentController extends HttpServlet {
 
 		} else {
 			out.print("User does not existed.");
-			request.getRequestDispatcher("/adminlogin.jsp").forward(request, response);
+			request.getRequestDispatcher("/adminlogin.jsp").include(request, response);
 		}
 	}
 
 	private void getUserMenu(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		PrintWriter out = response.getWriter();
-		CustomerRegistration payment = new CustomerRegistration();
 		String name = request.getParameter("fname");
 		String pwd = request.getParameter("pwd");
 		int id = paymentDao.getMenu(name, pwd);
-		if ( id > 0) {
+		if (id > 0) {
 			out.print("Welcome " + name);
 			HttpSession session = request.getSession();
 			session.setAttribute("userId", id);
@@ -93,7 +152,7 @@ public class PaymentController extends HttpServlet {
 
 		} else {
 			out.print("User does not existed.");
-			request.getRequestDispatcher("/userlogin.jsp").forward(request, response);
+			request.getRequestDispatcher("/userlogin.jsp").include(request, response);
 		}
 	}
 
@@ -115,7 +174,7 @@ public class PaymentController extends HttpServlet {
 
 		} else {
 			out.print("Data is not stored in Database");
-			request.getRequestDispatcher("/signup.jsp").forward(request, response);
+			request.getRequestDispatcher("/signup.jsp").include(request, response);
 		}
 	}
 

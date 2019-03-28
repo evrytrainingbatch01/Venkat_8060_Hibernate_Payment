@@ -15,15 +15,16 @@
 		<a href="userlogin.jsp">User Login</a>&nbsp;
 		<a href="signup.jsp">Signup</a>&nbsp;
 	</div>
-	<form action="./PaymentController" method="post">
+	<form action="./PaymentController?type=signup" method="post">
 		<table align="center">
 			<tr><th>Id: </th><td><input type="text" name="id" /></td></tr>
 			<tr><th>First Name: </th><td><input type="text" name="fname"/></td></tr>
 			<tr><th>Last Name: </th><td><input type="text" name="lname"/></td></tr>
+			<tr><th>Password: </th><td><input type="text" name="pwd"/></td></tr>
 			<tr><th>City: </th><td><input type="text" name="city"/></td></tr>
 			<tr><th>Country: </th><td><input type="text" name="country"/></td></tr>
-			<tr><th>Mobile: </th><td><input type="text" name="pid" /></td></tr>
-			<tr><th>Email: </th><td><input type="text" name="fname"/></td></tr>
+			<tr><th>Mobile: </th><td><input type="text" name="mobile" /></td></tr>
+			<tr><th>Email: </th><td><input type="text" name="email"/></td></tr>
 			<tr><td><input type="submit" value="Submit"/></td>
 				<td><input type="reset" value="Reset"/></td></tr>
 		</table>

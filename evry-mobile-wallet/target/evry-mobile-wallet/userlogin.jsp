@@ -15,9 +15,9 @@
 		<a href="userlogin.jsp">User Login</a>&nbsp;
 		<a href="signup.jsp">Signup</a>&nbsp;
 	</div>
-	<form action="./PaymentController" method="post">
+	<form action="./PaymentController?type=userlogin" method="post">
 		<table align="center">
-			<tr><th>UserId: </th><td><input type="text" name="id" /></td></tr>
+			<tr><th>User Name: </th><td><input type="text" name="fname" /></td></tr>
 			<tr><th>Password: </th><td><input type="password" name="pwd"/></td></tr>
 			<tr><td><input type="submit" value="Login"/></td>
 			<td><input type="reset" value="Reset"/></td></tr>
