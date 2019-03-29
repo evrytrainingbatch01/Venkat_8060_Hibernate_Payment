@@ -97,15 +97,16 @@ public class PaymentDao {
 		config.configure("hibernate.cfg.xml");
 		SessionFactory factory = config.buildSessionFactory();
 		Session session = factory.openSession();
+		Transaction tx = session.beginTransaction();
 		Query qry = session.createQuery("UPDATE Customer c SET c.balance =:balance where c.id =:id");
 		qry.setParameter("balance", balance);
 		qry.setParameter("id", sid);
-		if (qry.executeUpdate() == 1) {
+		if (qry.executeUpdate() >= 1) {
 			if (transferToPayee(did, money)) {
 				flag = true;
 			}
 		}
-
+		tx.commit();
 		factory.close();
 		session.close();
 
@@ -150,19 +151,27 @@ public class PaymentDao {
 	}
 
 	public boolean approveMoney(int id) {
+		boolean flag = false;
 		int balance = getBalance(id);
 		int amount = getCustomerAmount(id);
 		Configuration config = new Configuration();
 		config.configure("hibernate.cfg.xml");
 		SessionFactory factory = config.buildSessionFactory();
 		Session session = factory.openSession();
+		Transaction tx = session.beginTransaction();
 		Query qry = session.createQuery("UPDATE Customer c SET c.balance =:balance where c.id =:id");
 		qry.setParameter("balance", balance + amount);
 		qry.setParameter("id", id);
 		int result = qry.executeUpdate();
+		if (result >= 1) {
+			if (updateTransaction1(id)) {
+				flag = true;
+			}
+		}
+		tx.commit();
 		factory.close();
 		session.close();
-		return (result == 1) ? true : false;
+		return flag;
 	}
 
 	private int getCustomerAmount(int id) {
@@ -182,19 +191,60 @@ public class PaymentDao {
 	}
 
 	public boolean sendMoney(int id) {
+		boolean flag = false;
 		int balance = getBalance(id);
 		int amount = getTransferAmount(id);
+		balance = balance + amount;
 		Configuration config = new Configuration();
 		config.configure("hibernate.cfg.xml");
 		SessionFactory factory = config.buildSessionFactory();
 		Session session = factory.openSession();
+		Transaction tx = session.beginTransaction();
 		Query qry = session.createQuery("UPDATE Customer c SET c.balance =:balance where c.id =:id");
-		qry.setParameter("balance", balance + amount);
+		qry.setParameter("balance", balance);
 		qry.setParameter("id", id);
 		int result = qry.executeUpdate();
+		if (result >= 1) {
+			if (updateTransaction2(id)) {
+				flag = true;
+			}
+		}
+		tx.commit();
 		factory.close();
 		session.close();
-		return (result == 1) ? true : false;
+		return flag;
+	}
+
+	private boolean updateTransaction1(int id) {
+		Configuration config = new Configuration();
+		config.configure("hibernate.cfg.xml");
+		SessionFactory factory = config.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx = session.beginTransaction();
+		System.out.println("tx1" + id);
+		Query qry = session.createQuery("UPDATE TransactionDetails t SET t.process_amount = 0 WHERE t.id =:id");
+		qry.setParameter("id", id);
+		int result = qry.executeUpdate();
+		tx.commit();
+		factory.close();
+		session.close();
+		return (result >= 1) ? true : false;
+	}
+
+	private boolean updateTransaction2(int id) {
+		Configuration config = new Configuration();
+		config.configure("hibernate.cfg.xml");
+		SessionFactory factory = config.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction tx = session.beginTransaction();
+		System.out.println("tx 2" + id);
+		Query qry = session.createQuery("UPDATE TransactionDetails t SET t.transfer_amount = 0 WHERE t.id =:id");
+		qry.setParameter("id", id);
+		int result = qry.executeUpdate();
+		tx.commit();
+		factory.close();
+		session.close();
+		return (result >= 1) ? true : false;
 	}
 
 	private int getTransferAmount(int id) {
@@ -211,6 +261,20 @@ public class PaymentDao {
 		session.close();
 
 		return Integer.parseInt(result.get(0).toString());
+	}
+
+	public List<Customer> showUsers() {
+		Configuration config = new Configuration();
+		config.configure("hibernate.cfg.xml");
+		SessionFactory factory = config.buildSessionFactory();
+		Session session = factory.openSession();
+		Transaction txn = session.beginTransaction();
+		Criteria cr = session.createCriteria(Customer.class);
+		cr.add(Restrictions.eq("access", 0));
+		List<Customer> results = cr.list();
+		factory.close();
+		session.close();
+		return results;
 	}
 
 }

@@ -13,6 +13,7 @@
 		<a href="addMoney.jsp">Add Money</a>&nbsp;
 		<a href="transfer.jsp">Transfer Money</a>&nbsp;
 		<a href="checkBal.jsp">Check Balance</a>&nbsp;
+		<a href="LogoutServlet">Logout</a>&nbsp;
 	</div>
 	<form action="./PaymentController?type=transfer" method="post">
 		<table align="center">

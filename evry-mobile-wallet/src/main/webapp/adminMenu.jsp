@@ -13,6 +13,7 @@
 		<a href="approveMoney.jsp">Add Money</a>&nbsp;
 		<a href="sendMoney.jsp">Send Money</a>&nbsp;
 		<a href="showUsers.jsp">Show Users</a>&nbsp;
+		<a href="LogoutServlet">Logout</a>&nbsp;
 	</div>
 </body>
 </html>

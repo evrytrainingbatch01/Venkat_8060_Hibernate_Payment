@@ -10,9 +10,19 @@
   	<description></description>
   	<servlet-class>com.evry.payment.wallet.controller.PaymentController</servlet-class>
   </servlet>
+  <servlet>
+  	<servlet-name>LogoutServlet</servlet-name>
+  	<display-name>LogoutServlet</display-name>
+  	<description></description>
+  	<servlet-class>com.evry.payment.wallet.controller.LogoutServlet</servlet-class>
+  </servlet>
   <servlet-mapping>
   	<servlet-name>PaymentController</servlet-name>
   	<url-pattern>/PaymentController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>LogoutServlet</servlet-name>
+  	<url-pattern>/LogoutServlet</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

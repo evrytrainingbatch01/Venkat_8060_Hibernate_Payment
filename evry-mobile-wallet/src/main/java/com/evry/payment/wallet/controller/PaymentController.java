@@ -2,6 +2,8 @@ package com.evry.payment.wallet.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.evry.payment.wallet.dao.PaymentDao;
+import com.evry.payment.wallet.model.Customer;
 import com.evry.payment.wallet.model.CustomerRegistration;
 
 /**
@@ -45,6 +48,26 @@ public class PaymentController extends HttpServlet {
 		if ("send".equals(request.getParameter("type"))) {
 			sendMoney(request, response);
 		}
+		if ("users".equals(request.getParameter("type"))) {
+			showUsers(request, response);
+		}
+	}
+
+	private void showUsers(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		PrintWriter out = response.getWriter();
+		List<Customer> customers = paymentDao.showUsers();
+		Iterator itr = customers.iterator();
+		out.println("ID"+"&nbsp;&nbsp;"+"Name&nbsp;&nbsp;"+"Balance&nbsp;&nbsp;<br/>");
+		while (itr.hasNext()) {
+
+			Customer customer = (Customer) itr.next();
+			out.println(customer.getId()+"&nbsp;&nbsp;&nbsp;&nbsp;");
+			out.println(customer.getFname()+"&nbsp;&nbsp;&nbsp;&nbsp;");
+			out.println(customer.getBalance()+"&nbsp;&nbsp;&nbsp;&nbsp;");
+			out.print("<br/>");
+		}
+		request.getRequestDispatcher("/showUsers.jsp").include(request, response);
 	}
 
 	private void sendMoney(HttpServletRequest request, HttpServletResponse response)
