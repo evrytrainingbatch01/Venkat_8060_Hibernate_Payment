@@ -2,10 +2,14 @@ package com.evry.payment.wallet.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "transaction")
+@PrimaryKeyJoinColumn(name="id")
 public class TransactionDetails {
 	@Id
 	private int id;

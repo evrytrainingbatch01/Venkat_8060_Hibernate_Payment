@@ -3,10 +3,13 @@ package com.evry.payment.wallet.model;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "customer")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Customer {
 	@Id
 	private int id;
